@@ -1,8 +1,8 @@
-# EchoText Proactive — Server Plugin
+# EchoText-Proactive — Server Plugin for SillyTavern
 
 > **Your characters keep talking even when the tab isn't open.**
 
-EchoText already supports proactive messaging, characters that reach out on their own with check-ins, morning greetings, late-night messages, and more. But browsers quietly throttle background tabs, which means those messages stop firing reliably the moment you minimize or switch away.
+<a href="https://github.com/mattjaybe/SillyTavern-EchoText">EchoText</a> already supports proactive messaging, characters that reach out on their own with check-ins, morning greetings, late-night messages, and more. But browsers quietly throttle background tabs, which means those messages stop firing reliably the moment you minimize or switch away.
 
 This server plugin solves that. It runs quietly alongside SillyTavern and keeps the proactive scheduler ticking at full speed no matter what your browser is doing. Install it once and forget about it; everything else works automatically through EchoText's existing Proactive Messaging settings.
 
