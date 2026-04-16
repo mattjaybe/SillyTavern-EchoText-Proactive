@@ -1,0 +1,14 @@
+{
+  "name": "echotext-proactive",
+  "version": "1.0.0",
+  "description": "EchoText Proactive Messaging server plugin — server-side scheduler for background proactive message generation",
+  "main": "index.js",
+  "author": "mattjaybe",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  }
+}
