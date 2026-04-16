@@ -1,64 +1,65 @@
-# SillyTavern-EchoText-Proactive
+# EchoText Proactive — Server Plugin
 
-Server plugin for EchoText that enables proactive message generation even when the browser tab is backgrounded or minimized.
+> **Your characters keep talking even when the tab isn't open.**
 
-## How it works
+EchoText already supports proactive messaging — characters that reach out on their own with check-ins, morning greetings, late-night messages, and more. But browsers quietly throttle background tabs, which means those messages stop firing reliably the moment you minimize or switch away.
 
-When a SillyTavern browser tab is not in focus, JavaScript timers are throttled by the browser — making EchoText's client-side proactive messaging scheduler unreliable. This server plugin fixes that by running an un-throttled Node.js scheduler server-side.
+This server plugin solves that. It runs quietly alongside SillyTavern and keeps the proactive scheduler ticking at full speed no matter what your browser is doing. Install it once and forget about it — everything else works automatically through EchoText's existing Proactive Messaging settings.
 
-```
-Browser (EchoText)          SillyTavern Server Plugin
-─────────────────           ──────────────────────────
-tab focused/active          setInterval (never throttled)
-  ↓ register state ──────► evaluates triggers every 60s
-  ↓ poll /pending  ◄────── generates via ollama/openai directly
-  ↓ merge messages         OR queues deferred trigger for client
-```
+---
 
-- **ollama / openai sources**: server generates messages directly
-- **default / profile sources**: server queues a deferred trigger; client executes generation immediately on next poll/tab-focus
+## What changes after installing
+
+- Characters send proactive messages reliably even when SillyTavern is minimized or the tab is in the background
+- Morning messages actually arrive in the morning. Late-night check-ins actually arrive at night
+- No new settings to learn — EchoText detects the plugin automatically and switches to server-backed scheduling
+
+---
 
 ## Installation
 
-1. Copy or symlink this folder into SillyTavern's `plugins/` directory:
-   ```
-   SillyTavern/plugins/echotext-proactive/
-   ```
+### Step 1 — Clone the plugin into SillyTavern
 
-2. In SillyTavern's `config.yaml`, ensure:
-   ```yaml
-   enableServerPlugins: true
-   ```
+Open a terminal, navigate to your SillyTavern folder, and run:
 
-3. Restart SillyTavern. You should see in the server console:
-   ```
-   [EchoText-Proactive] Plugin loaded. Version: 1.0.0
-   [EchoText-Proactive] Scheduler started (tick every 60s).
-   ```
+```bash
+git clone https://github.com/mattjaybe/SillyTavern-EchoText-Proactive plugins/echotext-proactive
+```
 
-4. Open EchoText in the browser. When Proactive Messaging is enabled and a character is loaded in Tethered mode, the browser console will show:
-   ```
-   [EchoText-Proactive] Server plugin detected v1.0.0. Background generation enabled.
-   ```
+> **Don't have Git?** You can also download this repository as a ZIP, extract it, and place the folder at `SillyTavern/plugins/echotext-proactive/`.
 
-## API Endpoints
+### Step 2 — Enable server plugins in SillyTavern
 
-All endpoints are under `/api/plugins/echotext-proactive/`:
+Open `SillyTavern/config.yaml` in any text editor and make sure this line is present and set to `true`:
 
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/status` | Health check |
-| `POST` | `/register` | Client pushes character state |
-| `GET` | `/pending?key=...` | Poll for queued messages |
-| `POST` | `/ack` | Acknowledge received messages |
-| `POST` | `/heartbeat` | Keep registration alive (lightweight) |
+```yaml
+enableServerPlugins: true
+```
 
-## Configuration
+### Step 3 — Restart SillyTavern
 
-The plugin uses whatever LLM settings EchoText is configured with — no separate configuration required. Generation source and API endpoints are pushed from the browser extension on registration.
+Stop and restart SillyTavern. If the plugin loaded correctly, you'll see this in the server console:
 
-## Requirements
+```
+[EchoText-Proactive] Plugin loaded. Version: 1.0.0
+[EchoText-Proactive] Scheduler started (tick every 60s).
+```
 
-- SillyTavern with `enableServerPlugins: true`
-- Node.js 18+ (for native `fetch`)
-- For background generation: `ollama` or `openai`-compatible source in EchoText settings
+### Step 4 — Confirm it's working
+
+Open EchoText in the browser with a character loaded and Proactive Messaging enabled. Check the browser console (F12) — you should see:
+
+```
+[EchoText-Proactive] Server plugin detected v1.0.0. Background generation enabled.
+```
+
+That's it — no further configuration needed.
+
+---
+
+## Notes
+
+- **No extra setup required.** The plugin picks up whatever generation source you've already configured in EchoText (Ollama, OpenAI-compatible, Connection Profile, etc.).
+- **Ollama / OpenAI sources** generate messages directly on the server side, so they arrive even if you never return to the tab.
+- **Default / Connection Profile sources** queue a trigger that fires the moment you return to the tab or EchoText polls — still much more reliable than the browser-only scheduler.
+- This plugin stores everything in memory only. Nothing is written to disk, and all state clears when SillyTavern restarts.
