@@ -26,7 +26,7 @@ Open a terminal, navigate to your SillyTavern folder, and run:
 git clone https://github.com/mattjaybe/SillyTavern-EchoText-Proactive
 ```
 
-> **Don't have Git?** You can also download this repository as a ZIP, extract it, and place the folder at `SillyTavern/plugins/`.
+> **Don't have Git?** You can also download this repository as a ZIP, extract it, and place the folder at `SillyTavern/plugins/`. To download ZIP, click on the green 'Code' button then choose Download ZIP.
 
 ### Step 2 — Enable server plugins in SillyTavern
 
